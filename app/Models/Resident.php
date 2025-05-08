@@ -33,8 +33,8 @@ class Resident extends Model
     /**
      * Get the payments for the resident.
      */
-    // public function payments()
-    // {
-    //     return $this->hasMany(Payment::class);
-    // }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

@@ -25,4 +25,12 @@ class House extends Model
     {
         return $this->hasMany(ResidentHouseHistory::class);
     }
+
+    /**
+     * Get the payments for the house.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
