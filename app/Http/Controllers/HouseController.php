@@ -7,9 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\HouseResource;
 use App\Http\Requests\StoreHouseRequest;
 use App\Http\Requests\UpdateHouseRequest;
-use Illuminate\Http\Request;
-
-// Request
 
 class HouseController extends Controller
 {

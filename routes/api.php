@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ResidentController;
 
 // Auth routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -16,5 +17,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // House routes
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('houses', HouseController::class);
+        Route::apiResource('residents', ResidentController::class);
     });
 });
