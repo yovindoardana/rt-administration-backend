@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ResidentController;
@@ -22,5 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('residents', ResidentController::class);
         Route::apiResource('resident-house-histories', ResidentHouseHistoryController::class);
         Route::apiResource('payments', PaymentController::class);
+        Route::apiResource('expenses', ExpenseController::class);
     });
 });

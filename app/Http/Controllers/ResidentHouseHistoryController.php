@@ -82,9 +82,9 @@ class ResidentHouseHistoryController extends Controller
                 ->update(['is_current' => false]);
         }
 
-        $ok = $resident_house_history->update($data);
+        $updatedData = $resident_house_history->update($data);
 
-        if ($ok) {
+        if ($updatedData) {
             $resident_house_history->refresh();
             return response()->json([
                 'message' => 'History updated',
