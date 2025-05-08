@@ -21,8 +21,8 @@ class House extends Model
     /**
      * Get the histories for the house.
      */
-    // public function histories()
-    // {
-    //     return $this->hasMany(ResidentHouseHistory::class);
-    // }
+    public function histories()
+    {
+        return $this->hasMany(ResidentHouseHistory::class);
+    }
 }

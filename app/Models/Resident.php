@@ -22,11 +22,17 @@ class Resident extends Model
         'marital_status' => 'string',
     ];
 
-    // public function histories()
-    // {
-    //     return $this->hasMany(ResidentHouseHistory::class);
-    // }
+    /**
+     * Get the histories for the resident.
+     */
+    public function histories()
+    {
+        return $this->hasMany(ResidentHouseHistory::class);
+    }
 
+    /**
+     * Get the payments for the resident.
+     */
     // public function payments()
     // {
     //     return $this->hasMany(Payment::class);
