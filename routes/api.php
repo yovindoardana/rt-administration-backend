@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\ExpenseController;
@@ -19,6 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // House routes
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+
         Route::apiResource('houses', HouseController::class);
         Route::apiResource('residents', ResidentController::class);
         Route::apiResource('resident-house-histories', ResidentHouseHistoryController::class);
