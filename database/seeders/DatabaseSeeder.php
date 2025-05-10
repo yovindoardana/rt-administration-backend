@@ -2,10 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\House;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\House;
 use Illuminate\Database\Seeder;
+use Database\Seeders\HouseSeeder;
+use Database\Seeders\ExpenseSeeder;
+use Database\Seeders\PaymentSeeder;
+use Database\Seeders\ResidentSeeder;
+use Database\Seeders\ResidentHouseHistorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,53 +18,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
         ]);
 
-        House::factory()->create([
-            'house_number' => 'House 1',
-            'status' => 'vacant',
-        ]);
-
-        House::factory()->create([
-            'house_number' => 'House 2',
-            'status' => 'occupied',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 3',
-            'status' => 'vacant',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 4',
-            'status' => 'occupied',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 5',
-            'status' => 'vacant',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 6',
-            'status' => 'occupied',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 7',
-            'status' => 'vacant',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 8',
-            'status' => 'occupied',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 9',
-            'status' => 'vacant',
-        ]);
-        House::factory()->create([
-            'house_number' => 'House 10',
-            'status' => 'occupied',
+        $this->call([
+            HouseSeeder::class,
+            ResidentSeeder::class,
+            ResidentHouseHistorySeeder::class,
+            PaymentSeeder::class,
+            ExpenseSeeder::class,
         ]);
     }
 }
