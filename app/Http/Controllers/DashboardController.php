@@ -53,7 +53,7 @@ class DashboardController extends Controller
 
         $annual = collect(range(1, 12))->map(fn($m) => [
             'month'   => $m,
-            'income'  => $incomes[$m]  ?? 0,
+            'income'  => $incomes[$m] ?? 0,
             'expense' => $expenses[$m] ?? 0,
         ])->all();
 
