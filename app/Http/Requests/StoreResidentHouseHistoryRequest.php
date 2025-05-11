@@ -19,14 +19,11 @@ class StoreResidentHouseHistoryRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'house_id'     => ['required', 'exists:houses,id'],
-            'resident_id'  => ['required', 'exists:residents,id'],
-            'start_date'   => ['required', 'date'],
-            'end_date'     => ['nullable', 'date', 'after_or_equal:start_date'],
-            'is_current'   => ['sometimes', 'boolean'],
+            'resident_id' => ['required', 'integer', 'exists:residents,id'],
+            'start_date'  => ['required', 'date'],
         ];
     }
 }

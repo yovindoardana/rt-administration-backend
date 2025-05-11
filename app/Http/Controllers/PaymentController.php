@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentResource;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
+use App\Models\House;
 
 class PaymentController extends Controller
 {
@@ -34,16 +35,17 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePaymentRequest $request)
+    public function store(StorePaymentRequest $request, House $house)
     {
         $data = $request->validated();
+        $payment = $house->payments()->create([
+            'resident_id'  => $data['resident_id'],
+            'amount'       => $data['amount'],
+            'payment_date' => $data['payment_date'],
+            'status'       => $data['status'],
+        ]);
 
-        $payment = Payment::create($data);
-
-        return response()->json([
-            'message' => 'Payment recorded',
-            'data'    => new PaymentResource($payment->load(['resident', 'house'])),
-        ], 201);
+        return new PaymentResource($payment);
     }
 
     /**
@@ -95,5 +97,19 @@ class PaymentController extends Controller
         return response()->json([
             'message' => 'Payment deleted',
         ], 200);
+    }
+
+    public function listPayments(Request $request, House $house)
+    {
+        $perPage = $request->query('per_page', 15);
+        $page    = $request->query('page', 1);
+
+        $paginator = $house
+            ->payments()
+            ->with('resident')
+            ->orderByDesc('payment_date')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return PaymentResource::collection($paginator);
     }
 }

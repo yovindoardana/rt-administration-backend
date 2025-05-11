@@ -77,18 +77,22 @@ class ResidentHouseHistoryController extends Controller
     {
         $data = $request->validated();
 
-        if (array_key_exists('is_current', $data) && $data['is_current']) {
-            ResidentHouseHistory::where('house_id', $resident_house_history->house_id)
-                ->update(['is_current' => false]);
-        }
+        ResidentHouseHistory::where('house_id', $resident_house_history->house_id)->update(['is_current' => false]);
 
-        $updatedData = $resident_house_history->update($data);
+        $updatePayload = array_merge(
+            $data,
+            ['is_current' => $data['is_current'] ?? $resident_house_history->is_current]
+        );
 
-        if ($updatedData) {
+        $updated = $resident_house_history->update($updatePayload);
+
+        if ($updated) {
             $resident_house_history->refresh();
             return response()->json([
                 'message' => 'History updated',
-                'data'    => new ResidentHouseHistoryResource($resident_house_history->load(['house', 'resident'])),
+                'data'    => new ResidentHouseHistoryResource(
+                    $resident_house_history->load(['house', 'resident'])
+                ),
             ], 200);
         }
 

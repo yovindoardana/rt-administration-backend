@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resident;
+use App\Models\ResidentHouseHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -104,5 +105,18 @@ class ResidentController extends Controller
                 'message' => 'Resident not found',
             ], 404);
         }
+    }
+
+    public function available()
+    {
+        // Ambil semua resident_id yang sedang occupy
+        $assigned = ResidentHouseHistory::where('is_current', true)
+            ->pluck('resident_id')
+            ->unique();
+
+        // Ambil residents yang tidak ada di daftar assigned
+        $available = Resident::whereNotIn('id', $assigned)->get();
+
+        return ResidentResource::collection($available);
     }
 }

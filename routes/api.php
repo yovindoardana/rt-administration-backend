@@ -26,7 +26,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
 
         Route::apiResource('houses', HouseController::class);
+
+        Route::get('/houses/{house}/occupants', [HouseController::class, 'listOccupants']);
+        Route::post('/houses/{house}/occupants', [HouseController::class, 'addOccupant']);
+        Route::get('/houses/{house}/payments', [PaymentController::class, 'listPayments']);
+        Route::post('/houses/{house}/payments',   [PaymentController::class, 'store']);
+
+
+
+        Route::get('/residents/available', [ResidentController::class, 'available']);
         Route::apiResource('residents', ResidentController::class);
+
+
         Route::apiResource('resident-house-histories', ResidentHouseHistoryController::class);
         Route::apiResource('payments', PaymentController::class);
         Route::apiResource('expenses', ExpenseController::class);

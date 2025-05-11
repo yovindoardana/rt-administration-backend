@@ -19,18 +19,13 @@ class StorePaymentRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'resident_id'      => ['required', 'exists:residents,id'],
-            'house_id'         => ['required', 'exists:houses,id'],
-            'fee_type'         => ['required', 'in:security,cleaning'],
-            'month'            => ['required', 'integer', 'between:1,12'],
-            'year'             => ['required', 'integer', 'digits:4'],
-            'duration_months'  => ['sometimes', 'integer', 'min:1'],
-            'amount'           => ['required', 'integer', 'min:0'],
-            'status'           => ['sometimes', 'in:paid,unpaid'],
-            'payment_date'     => ['required', 'date'],
+            'resident_id'  => ['required', 'integer', 'exists:residents,id'],
+            'amount'       => ['required', 'numeric'],
+            'payment_date' => ['required', 'date'],
+            'status'       => ['required', 'in:paid,unpaid'],
         ];
     }
 }

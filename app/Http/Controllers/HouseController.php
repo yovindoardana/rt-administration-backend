@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreResidentHouseHistoryRequest;
+use App\Http\Resources\ResidentHouseHistoryResource;
 use App\Models\House;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\HouseResource;
 use App\Http\Requests\StoreHouseRequest;
 use App\Http\Requests\UpdateHouseRequest;
+use App\Models\ResidentHouseHistory;
+use Illuminate\Http\Request;
 
 class HouseController extends Controller
 {
@@ -51,6 +55,7 @@ class HouseController extends Controller
      */
     public function show(House $house)
     {
+        $house->load(['histories.resident', 'payments.resident']);
         return new HouseResource($house);
     }
 
@@ -90,5 +95,51 @@ class HouseController extends Controller
         return response()->json([
             'message' => 'House deleted successfully',
         ], 200);
+    }
+
+    public function addOccupant(StoreResidentHouseHistoryRequest $request, House $house)
+    {
+        $data = $request->validated();
+
+        $previous = ResidentHouseHistory::where('house_id', $house->id)
+            ->where('is_current', true)
+            ->first();
+
+        if ($previous) {
+            $previous->update([
+                'end_date'    => $data['start_date'],
+                'is_current'  => false,
+            ]);
+        }
+
+        $newHistory = ResidentHouseHistory::create([
+            'house_id'    => $house->id,
+            'resident_id' => $data['resident_id'],
+            'start_date'  => $data['start_date'],
+            'end_date'    => null,
+            'is_current'  => true,
+        ]);
+
+        $house->update([
+            'status' => 'occupied',
+        ]);
+
+        return new ResidentHouseHistoryResource(
+            $newHistory->load(['house', 'resident'])
+        );
+    }
+
+    public function listOccupants(Request $request, House $house)
+    {
+        $page    = $request->query('page', 1);
+        $perPage = $request->query('per_page', 10);
+
+        $paginator = $house
+            ->histories()
+            ->with('resident')
+            ->orderByDesc('created_at')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return ResidentHouseHistoryResource::collection($paginator);
     }
 }
